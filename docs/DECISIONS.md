@@ -27,3 +27,17 @@ Deleting the company would leave related application, interview, and follow-up t
 ### Consequence
 
 The user must remove or reassign the related applications before deleting the company.
+
+## D-003: Cascade delete records dependent on a job application
+
+### Decision
+
+Deleting a JobApplication also deletes its related Interview and FollowUpTask records.
+
+### Reason
+
+Interview and task records have no meaningful context without their parent JobApplication.
+
+### Consequence
+
+The user must confirm the deletion because the related records cannot remain in the system.
