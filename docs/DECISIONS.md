@@ -41,3 +41,17 @@ Interview and task records have no meaningful context without their parent JobAp
 ### Consequence
 
 The user must confirm the deletion because the related records cannot remain in the system.
+
+## D-004: Keep interview outcomes separate from application status updates
+
+### Decision
+
+Updating an Interview outcome does not automatically update the parent JobApplication status.
+
+### Reason
+
+Interview outcomes may not fully represent the final state of an application. The user must retain control over the overall application status.
+
+### Consequence
+
+The application status is updated explicitly by the user, even after an interview outcome is recorded.

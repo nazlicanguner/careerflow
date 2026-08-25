@@ -64,6 +64,10 @@ For example, one application can contain:
 - A JobApplication cannot be created without a positionTitle and status.
 - Deleting a JobApplication also deletes its related Interview and FollowUpTask records.
 - The user must confirm this destructive action before the deletion is completed.
+- An Interview must be linked to an existing JobApplication.
+- The stageNumber must be unique within the same JobApplication.
+- A new Interview record has the PENDING outcome by default.
+- Updating an Interview outcome does not automatically update the JobApplication status.
 
 ## Entity: JobApplication
 
@@ -99,3 +103,29 @@ The workMode field can use one of the following values:
 ### Application Source
 
 The source field is optional free text, for example LinkedIn, Indeed, StepStone, company website, or referral.
+
+### Interview Type
+
+The interviewType field can use one of the following values:
+
+- ONLINE
+- ONSITE
+- PHONE
+- OTHER
+
+## Entity: Interview
+
+| Field | Purpose | Required |
+|---|---|---|
+| id | Unique identifier for the interview | Yes |
+| jobApplicationId | Identifier of the related JobApplication | Yes |
+| stageNumber | Order of the interview stage in the hiring process | Yes |
+| stageName | Name of the interview stage | Yes |
+| scheduledAt | Date and time of the interview | Yes |
+| interviewType | Format of the interview | Yes |
+| outcome | Current or final outcome of the interview | Yes |
+| interviewerName | Name of the interviewer, if known | No |
+| locationOrMeetingLink | Location or online meeting link | No |
+| notes | Personal preparation, feedback, or follow-up notes | No |
+| createdAt | Date and time when the record was created | Yes |
+| updatedAt | Date and time when the record was last updated | Yes |
