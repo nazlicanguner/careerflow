@@ -1,0 +1,23 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Java and Maven
+target/
+out/
+*.class
+
+# Angular and Node.js
+node_modules/
+dist/
+.angular/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Logs and operating system files
+*.log
+.DS_Store
+Thumbs.db
