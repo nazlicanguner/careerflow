@@ -13,3 +13,17 @@ A hiring process may contain multiple interviews with different dates, formats, 
 ### Consequence
 
 An application can remain in the INTERVIEWING status while its individual interview records show whether each stage is pending, passed, failed, or cancelled.
+
+## D-002: Prevent deletion of companies with applications
+
+### Decision
+
+The system does not allow a Company to be deleted while related JobApplication records exist.
+
+### Reason
+
+Deleting the company would leave related application, interview, and follow-up task records without valid context.
+
+### Consequence
+
+The user must remove or reassign the related applications before deleting the company.
