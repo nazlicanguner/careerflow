@@ -55,3 +55,17 @@ Interview outcomes may not fully represent the final state of an application. Th
 ### Consequence
 
 The application status is updated explicitly by the user, even after an interview outcome is recorded.
+
+## D-005: Use a simple completion model for follow-up tasks
+
+### Decision
+
+FollowUpTask uses a completed boolean and completedAt timestamp instead of multiple task statuses.
+
+### Reason
+
+The MVP only needs to distinguish pending tasks from completed tasks. Additional states such as in progress or blocked would add complexity without a clear user need.
+
+### Consequence
+
+Task management remains simple while preserving the time when a task was completed.

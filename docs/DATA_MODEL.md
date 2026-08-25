@@ -16,6 +16,15 @@ CareerFlow stores job-search data through four main entities:
 - One JobApplication can have many Interviews.
 - One JobApplication can have many FollowUpTasks.
 
+## Entity Relationship Diagram
+
+```mermaid
+erDiagram
+    COMPANY ||--o{ JOB_APPLICATION : has
+    JOB_APPLICATION ||--o{ INTERVIEW : includes
+    JOB_APPLICATION ||--o{ FOLLOW_UP_TASK : has
+```
+
 ## Application Status and Interview Stages
 
 A JobApplication stores the overall current status of an application:
@@ -68,6 +77,10 @@ For example, one application can contain:
 - The stageNumber must be unique within the same JobApplication.
 - A new Interview record has the PENDING outcome by default.
 - Updating an Interview outcome does not automatically update the JobApplication status.
+- A FollowUpTask must be linked to an existing JobApplication.
+- A new FollowUpTask has the MEDIUM priority by default.
+- When a FollowUpTask is marked as completed, the system records completedAt automatically.
+- When a completed FollowUpTask is reopened, the system clears completedAt.
 
 ## Entity: JobApplication
 
@@ -113,6 +126,14 @@ The interviewType field can use one of the following values:
 - PHONE
 - OTHER
 
+### Task Priority
+
+The priority field can use one of the following values:
+
+- LOW
+- MEDIUM
+- HIGH
+
 ## Entity: Interview
 
 | Field | Purpose | Required |
@@ -127,5 +148,20 @@ The interviewType field can use one of the following values:
 | interviewerName | Name of the interviewer, if known | No |
 | locationOrMeetingLink | Location or online meeting link | No |
 | notes | Personal preparation, feedback, or follow-up notes | No |
+| createdAt | Date and time when the record was created | Yes |
+| updatedAt | Date and time when the record was last updated | Yes |
+
+## Entity: FollowUpTask
+
+| Field | Purpose | Required |
+|---|---|---|
+| id | Unique identifier for the follow-up task | Yes |
+| jobApplicationId | Identifier of the related JobApplication | Yes |
+| title | Short description of the task | Yes |
+| dueDate | Optional deadline for the task | No |
+| priority | Importance level of the task | Yes |
+| completed | Indicates whether the task is completed | Yes |
+| completedAt | Date and time when the task was completed | No |
+| notes | Additional notes about the task | No |
 | createdAt | Date and time when the record was created | Yes |
 | updatedAt | Date and time when the record was last updated | Yes |
