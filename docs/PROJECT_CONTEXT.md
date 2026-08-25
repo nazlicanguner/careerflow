@@ -1,10 +1,10 @@
 # CareerFlow - Project Context
 
 ## Product Vision
-CareerFlow is a full-stack web application that helps jobseekers manage companies, job applications, interviews, and follow-up tasks in one place.
+CareerFlow is a full-stack web application that helps job seekers manage companies, job applications, interviews, and follow-up tasks in one place.
 
 ## Target User
-An active jobseeker managing multiple applications and interview processes.
+An active job seeker managing multiple applications and interview processes.
 
 ## Problem Statement
 Job-search information is often scattered across job boards, emails, calendars, and notes. CareerFlow provides a clear view of the complete application pipeline and upcoming actions.
