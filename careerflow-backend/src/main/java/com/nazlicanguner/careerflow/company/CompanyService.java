@@ -25,4 +25,21 @@ public class CompanyService {
         return companyRepository.findById(id)
                 .orElseThrow(() -> new CompanyNotFoundException(id));
     }
+
+    public Company updateCompany(Long id, Company updatedCompany) {
+        Company existingCompany = getCompanyById(id);
+
+        existingCompany.setName(updatedCompany.getName());
+        existingCompany.setIndustry(updatedCompany.getIndustry());
+        existingCompany.setLocation(updatedCompany.getLocation());
+        existingCompany.setWebsite(updatedCompany.getWebsite());
+        existingCompany.setNotes(updatedCompany.getNotes());
+
+        return companyRepository.save(existingCompany);
+    }
+
+    public void deleteCompany(Long id) {
+        Company company = getCompanyById(id);
+        companyRepository.delete(company);
+    }
 }

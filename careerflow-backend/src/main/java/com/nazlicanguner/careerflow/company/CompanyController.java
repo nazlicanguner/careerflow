@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 
@@ -29,6 +31,20 @@ public class CompanyController {
     @GetMapping("/{id}")
     public Company getCompanyById(@PathVariable("id") Long id) {
         return companyService.getCompanyById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Company updateCompany(
+            @PathVariable("id") Long id,
+            @RequestBody Company company
+    ) {
+        return companyService.updateCompany(id, company);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCompany(@PathVariable("id") Long id) {
+        companyService.deleteCompany(id);
     }
 
     @PostMapping
