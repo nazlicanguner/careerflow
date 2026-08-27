@@ -20,4 +20,9 @@ public class CompanyService {
     public Company createCompany(Company company) {
         return companyRepository.save(company);
     }
+
+    public Company getCompanyById(Long id) {
+        return companyRepository.findById(id)
+                .orElseThrow(() -> new CompanyNotFoundException(id));
+    }
 }
