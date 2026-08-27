@@ -1,0 +1,14 @@
+POST http://localhost:8080/api/companies
+Content-Type: application/json
+
+{
+  "name": "Zalando",
+  "industry": "E-commerce",
+  "location": "Berlin, Germany",
+  "website": "https://www.zalando.com",
+  "notes": "Initial API test record."
+}
+
+###
+
+GET http://localhost:8080/api/companies
