@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 
@@ -46,5 +48,24 @@ public class JobApplicationController {
                 companyId,
                 jobApplication
         );
+    }
+
+    @PutMapping("/{id}")
+    public JobApplication updateJobApplication(
+            @PathVariable("id") Long id,
+            @RequestBody JobApplication jobApplication
+    ) {
+        return jobApplicationService.updateJobApplication(
+                id,
+                jobApplication
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteJobApplication(
+            @PathVariable("id") Long id
+    ) {
+        jobApplicationService.deleteJobApplication(id);
     }
 }

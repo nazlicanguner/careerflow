@@ -41,4 +41,45 @@ public class JobApplicationService {
 
         return jobApplicationRepository.save(jobApplication);
     }
+
+    public JobApplication updateJobApplication(
+            Long id,
+            JobApplication updatedJobApplication
+    ) {
+        JobApplication existingJobApplication = getJobApplicationById(id);
+
+        existingJobApplication.setPositionTitle(
+                updatedJobApplication.getPositionTitle()
+        );
+        existingJobApplication.setJobUrl(
+                updatedJobApplication.getJobUrl()
+        );
+        existingJobApplication.setLocation(
+                updatedJobApplication.getLocation()
+        );
+        existingJobApplication.setStatus(
+                updatedJobApplication.getStatus()
+        );
+        existingJobApplication.setWorkMode(
+                updatedJobApplication.getWorkMode()
+        );
+        existingJobApplication.setSource(
+                updatedJobApplication.getSource()
+        );
+        existingJobApplication.setApplicationDate(
+                updatedJobApplication.getApplicationDate()
+        );
+        existingJobApplication.setNotes(
+                updatedJobApplication.getNotes()
+        );
+
+        jobApplicationRepository.save(existingJobApplication);
+
+        return getJobApplicationById(id);
+    }
+
+    public void deleteJobApplication(Long id) {
+        JobApplication jobApplication = getJobApplicationById(id);
+        jobApplicationRepository.delete(jobApplication);
+    }
 }
