@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
+@Tag(name = "Follow-Up Tasks", description = "Manage follow-up tasks.")
 @RestController
 @RequestMapping("/api/follow-up-tasks")
 public class FollowUpTaskController {

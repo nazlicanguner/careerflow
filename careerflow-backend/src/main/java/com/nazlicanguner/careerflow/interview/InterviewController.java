@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
+@Tag(name = "Interviews", description = "Manage interview stages.")
 @RestController
 @RequestMapping("/api/interviews")
 public class InterviewController {
