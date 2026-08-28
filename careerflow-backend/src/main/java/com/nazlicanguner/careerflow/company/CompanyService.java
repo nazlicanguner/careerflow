@@ -1,6 +1,7 @@
 package com.nazlicanguner.careerflow.company;
 
 import org.springframework.stereotype.Service;
+import com.nazlicanguner.careerflow.jobapplication.JobApplicationRepository;
 
 import java.util.List;
 
@@ -8,11 +9,15 @@ import java.util.List;
 public class CompanyService {
 
     private final CompanyRepository companyRepository;
+    private final JobApplicationRepository jobApplicationRepository;
 
-    public CompanyService(CompanyRepository companyRepository) {
+    public CompanyService(
+            CompanyRepository companyRepository,
+            JobApplicationRepository jobApplicationRepository
+    ) {
         this.companyRepository = companyRepository;
+        this.jobApplicationRepository = jobApplicationRepository;
     }
-
     public List<Company> getAllCompanies() {
         return companyRepository.findAll();
     }
@@ -40,6 +45,11 @@ public class CompanyService {
 
     public void deleteCompany(Long id) {
         Company company = getCompanyById(id);
+
+        if (jobApplicationRepository.existsByCompanyId(id)) {
+            throw new CompanyHasJobApplicationsException(id);
+        }
+
         companyRepository.delete(company);
     }
 }

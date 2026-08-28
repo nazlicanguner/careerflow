@@ -26,4 +26,6 @@ public interface JobApplicationRepository
     Optional<JobApplication> findByIdWithCompany(
             @Param("id") Long id
     );
+
+    boolean existsByCompanyId(Long companyId);
 }
