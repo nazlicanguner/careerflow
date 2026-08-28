@@ -3,6 +3,9 @@ package com.nazlicanguner.careerflow.jobapplication;
 import com.nazlicanguner.careerflow.company.Company;
 import com.nazlicanguner.careerflow.company.CompanyNotFoundException;
 import com.nazlicanguner.careerflow.company.CompanyRepository;
+import com.nazlicanguner.careerflow.followuptask.FollowUpTaskRepository;
+import com.nazlicanguner.careerflow.interview.InterviewRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,13 +15,19 @@ public class JobApplicationService {
 
     private final JobApplicationRepository jobApplicationRepository;
     private final CompanyRepository companyRepository;
+    private final InterviewRepository interviewRepository;
+    private final FollowUpTaskRepository followUpTaskRepository;
 
     public JobApplicationService(
             JobApplicationRepository jobApplicationRepository,
-            CompanyRepository companyRepository
+            CompanyRepository companyRepository,
+            InterviewRepository interviewRepository,
+            FollowUpTaskRepository followUpTaskRepository
     ) {
         this.jobApplicationRepository = jobApplicationRepository;
         this.companyRepository = companyRepository;
+        this.interviewRepository = interviewRepository;
+        this.followUpTaskRepository = followUpTaskRepository;
     }
 
     public List<JobApplication> getAllJobApplications() {
@@ -78,8 +87,13 @@ public class JobApplicationService {
         return getJobApplicationById(id);
     }
 
-    public void deleteJobApplication(Long id) {
-        JobApplication jobApplication = getJobApplicationById(id);
-        jobApplicationRepository.delete(jobApplication);
-    }
+        @Transactional
+        public void deleteJobApplication(Long id) {
+            JobApplication jobApplication = getJobApplicationById(id);
+
+            interviewRepository.deleteByJobApplicationId(id);
+            followUpTaskRepository.deleteByJobApplicationId(id);
+
+            jobApplicationRepository.delete(jobApplication);
+        }
 }

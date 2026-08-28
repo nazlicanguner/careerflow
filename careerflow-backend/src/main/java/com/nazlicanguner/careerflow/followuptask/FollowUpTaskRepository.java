@@ -25,4 +25,5 @@ public interface FollowUpTaskRepository extends JpaRepository<FollowUpTask, Long
             where task.id = :id
             """)
     Optional<FollowUpTask> findByIdWithJobApplication(@Param("id") Long id);
+    void deleteByJobApplicationId(Long jobApplicationId);
 }

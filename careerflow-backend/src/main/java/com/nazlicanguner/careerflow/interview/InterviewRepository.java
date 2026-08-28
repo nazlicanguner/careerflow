@@ -32,4 +32,6 @@ public interface InterviewRepository extends JpaRepository<Interview, Long> {
             Long jobApplicationId,
             Integer stageNumber
     );
+
+    void deleteByJobApplicationId(Long jobApplicationId);
 }
