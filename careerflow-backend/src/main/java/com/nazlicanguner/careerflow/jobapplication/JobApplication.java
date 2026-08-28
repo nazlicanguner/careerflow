@@ -14,6 +14,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,15 +33,20 @@ public class JobApplication {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
+    @NotBlank(message = "Position title must not be blank.")
+    @Size(max = 160, message = "Position title must be at most 160 characters.")
     @Column(nullable = false, length = 160)
     private String positionTitle;
 
+    @Size(max = 500, message = "Job URL must be at most 500 characters.")
     @Column(length = 500)
     private String jobUrl;
 
+    @Size(max = 120, message = "Location must be at most 120 characters.")
     @Column(length = 120)
     private String location;
 
+    @NotNull(message = "Application status is required.")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private ApplicationStatus status = ApplicationStatus.SAVED;
@@ -47,11 +55,13 @@ public class JobApplication {
     @Column(length = 20)
     private WorkMode workMode;
 
+    @Size(max = 120, message = "Source must be at most 120 characters.")
     @Column(length = 120)
     private String source;
 
     private LocalDate applicationDate;
 
+    @Size(max = 2000, message = "Notes must be at most 2000 characters.")
     @Column(length = 2000)
     private String notes;
 

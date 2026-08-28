@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class FollowUpTaskController {
     @ResponseStatus(HttpStatus.CREATED)
     public FollowUpTask createFollowUpTask(
             @RequestParam Long jobApplicationId,
-            @RequestBody FollowUpTask followUpTask
+            @Valid @RequestBody FollowUpTask followUpTask
     ) {
         return followUpTaskService.createFollowUpTask(
                 jobApplicationId,
@@ -51,7 +52,7 @@ public class FollowUpTaskController {
     @PutMapping("/{id}")
     public FollowUpTask updateFollowUpTask(
             @PathVariable("id") Long id,
-            @RequestBody FollowUpTask followUpTask
+            @Valid @RequestBody FollowUpTask followUpTask
     ) {
         return followUpTaskService.updateFollowUpTask(id, followUpTask);
     }

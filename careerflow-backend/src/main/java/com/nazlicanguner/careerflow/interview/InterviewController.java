@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class InterviewController {
     @ResponseStatus(HttpStatus.CREATED)
     public Interview createInterview(
             @RequestParam Long jobApplicationId,
-            @RequestBody Interview interview
+            @Valid @RequestBody Interview interview
     ) {
         return interviewService.createInterview(
                 jobApplicationId,
@@ -51,7 +52,7 @@ public class InterviewController {
     @PutMapping("/{id}")
     public Interview updateInterview(
             @PathVariable("id") Long id,
-            @RequestBody Interview interview
+            @Valid @RequestBody Interview interview
     ) {
         return interviewService.updateInterview(id, interview);
     }

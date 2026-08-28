@@ -15,6 +15,10 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -36,23 +40,31 @@ public class Interview {
     @JoinColumn(name = "job_application_id", nullable = false)
     private JobApplication jobApplication;
 
+    @NotNull(message = "Stage number is required.")
+    @Positive(message = "Stage number must be greater than zero.")
     @Column(nullable = false)
     private Integer stageNumber;
 
+    @NotBlank(message = "Stage name must not be blank.")
+    @Size(max = 120, message = "Stage name must be at most 120 characters.")
     @Column(nullable = false, length = 120)
     private String stageName;
 
+    @NotNull(message = "Scheduled date and time is required.")
     @Column(nullable = false)
     private LocalDateTime scheduledAt;
 
+    @NotNull(message = "Interview type is required.")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private InterviewType interviewType;
 
+    @NotNull(message = "Interview outcome is required.")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private InterviewOutcome outcome = InterviewOutcome.PENDING;
 
+    @Size(max = 2000, message = "Notes must be at most 2000 characters.")
     @Column(length = 2000)
     private String notes;
 

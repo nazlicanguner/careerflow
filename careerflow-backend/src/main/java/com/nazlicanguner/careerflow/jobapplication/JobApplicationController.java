@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class JobApplicationController {
     @ResponseStatus(HttpStatus.CREATED)
     public JobApplication createJobApplication(
             @RequestParam Long companyId,
-            @RequestBody JobApplication jobApplication
+            @Valid @RequestBody JobApplication jobApplication
     ) {
         return jobApplicationService.createJobApplication(
                 companyId,
@@ -53,7 +54,7 @@ public class JobApplicationController {
     @PutMapping("/{id}")
     public JobApplication updateJobApplication(
             @PathVariable("id") Long id,
-            @RequestBody JobApplication jobApplication
+            @Valid @RequestBody JobApplication jobApplication
     ) {
         return jobApplicationService.updateJobApplication(
                 id,

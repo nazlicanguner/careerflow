@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class CompanyController {
     @PutMapping("/{id}")
     public Company updateCompany(
             @PathVariable("id") Long id,
-            @RequestBody Company company
+            @Valid @RequestBody Company company
     ) {
         return companyService.updateCompany(id, company);
     }
@@ -49,7 +50,7 @@ public class CompanyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Company createCompany(@RequestBody Company company) {
+    public Company createCompany(@Valid @RequestBody Company company) {
         return companyService.createCompany(company);
     }
 }

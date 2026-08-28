@@ -14,6 +14,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,15 +33,19 @@ public class FollowUpTask {
     @JoinColumn(name = "job_application_id", nullable = false)
     private JobApplication jobApplication;
 
+    @NotBlank(message = "Task title must not be blank.")
+    @Size(max = 160, message = "Task title must be at most 160 characters.")
     @Column(nullable = false, length = 160)
     private String title;
 
     private LocalDate dueDate;
 
+    @NotNull(message = "Task status is required.")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private TaskStatus status = TaskStatus.PENDING;
 
+    @Size(max = 2000, message = "Notes must be at most 2000 characters.")
     @Column(length = 2000)
     private String notes;
 
