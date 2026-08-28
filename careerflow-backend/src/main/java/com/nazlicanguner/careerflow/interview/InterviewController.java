@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 
@@ -44,5 +46,19 @@ public class InterviewController {
                 jobApplicationId,
                 interview
         );
+    }
+
+    @PutMapping("/{id}")
+    public Interview updateInterview(
+            @PathVariable("id") Long id,
+            @RequestBody Interview interview
+    ) {
+        return interviewService.updateInterview(id, interview);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteInterview(@PathVariable("id") Long id) {
+        interviewService.deleteInterview(id);
     }
 }

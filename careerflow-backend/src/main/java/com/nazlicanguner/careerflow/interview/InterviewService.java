@@ -59,4 +59,37 @@ public class InterviewService {
 
         return getInterviewById(savedInterview.getId());
     }
+
+    public Interview updateInterview(Long id, Interview updatedInterview) {
+        Interview existingInterview = getInterviewById(id);
+
+        boolean stageNumberChanged =
+                !existingInterview.getStageNumber().equals(updatedInterview.getStageNumber());
+
+        if (stageNumberChanged &&
+                interviewRepository.existsByJobApplicationIdAndStageNumber(
+                        existingInterview.getJobApplication().getId(),
+                        updatedInterview.getStageNumber()
+                )) {
+            throw new InterviewStageAlreadyExistsException(
+                    existingInterview.getJobApplication().getId(),
+                    updatedInterview.getStageNumber()
+            );
+        }
+
+        existingInterview.setStageNumber(updatedInterview.getStageNumber());
+        existingInterview.setStageName(updatedInterview.getStageName());
+        existingInterview.setScheduledAt(updatedInterview.getScheduledAt());
+        existingInterview.setInterviewType(updatedInterview.getInterviewType());
+        existingInterview.setOutcome(updatedInterview.getOutcome());
+        existingInterview.setNotes(updatedInterview.getNotes());
+
+        interviewRepository.save(existingInterview);
+        return getInterviewById(id);
+    }
+
+    public void deleteInterview(Long id) {
+        Interview interview = getInterviewById(id);
+        interviewRepository.delete(interview);
+    }
 }
