@@ -3,6 +3,8 @@ package com.nazlicanguner.careerflow.common;
 import com.nazlicanguner.careerflow.company.CompanyNotFoundException;
 import com.nazlicanguner.careerflow.jobapplication.JobApplicationNotFoundException;
 import com.nazlicanguner.careerflow.company.CompanyHasJobApplicationsException;
+import com.nazlicanguner.careerflow.interview.InterviewNotFoundException;
+import com.nazlicanguner.careerflow.interview.InterviewStageAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -44,6 +46,34 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CompanyHasJobApplicationsException.class)
     public ResponseEntity<ApiError> handleCompanyHasJobApplications(
             CompanyHasJobApplicationsException exception
+    ) {
+        ApiError apiError = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                HttpStatus.CONFLICT.getReasonPhrase(),
+                exception.getMessage()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(apiError);
+    }
+
+    @ExceptionHandler(InterviewNotFoundException.class)
+    public ResponseEntity<ApiError> handleInterviewNotFound(
+            InterviewNotFoundException exception
+    ) {
+        ApiError apiError = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                exception.getMessage()
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
+    }
+
+    @ExceptionHandler(InterviewStageAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handleInterviewStageAlreadyExists(
+            InterviewStageAlreadyExistsException exception
     ) {
         ApiError apiError = new ApiError(
                 LocalDateTime.now(),
