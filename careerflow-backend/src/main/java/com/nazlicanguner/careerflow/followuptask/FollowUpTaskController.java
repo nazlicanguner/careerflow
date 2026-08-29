@@ -28,8 +28,16 @@ public class FollowUpTaskController {
     }
 
     @GetMapping
-    public List<FollowUpTask> getAllFollowUpTasks() {
-        return followUpTaskService.getAllFollowUpTasks();
+    public List<FollowUpTask> getAllFollowUpTasks(
+            @RequestParam(required = false) TaskStatus status,
+            @RequestParam(required = false) Long jobApplicationId,
+            @RequestParam(defaultValue = "false") boolean overdue
+    ) {
+        return followUpTaskService.searchFollowUpTasks(
+                status,
+                jobApplicationId,
+                overdue
+        );
     }
 
     @GetMapping("/{id}")

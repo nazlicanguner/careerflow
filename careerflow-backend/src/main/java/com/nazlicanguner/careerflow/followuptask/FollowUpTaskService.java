@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.nazlicanguner.careerflow.activitylog.ActivityAction;
 import com.nazlicanguner.careerflow.activitylog.ActivityEntityType;
 import com.nazlicanguner.careerflow.activitylog.ActivityLogService;
+import java.time.LocalDate;
 
 import java.util.List;
 
@@ -29,6 +30,20 @@ public class FollowUpTaskService {
 
     public List<FollowUpTask> getAllFollowUpTasks() {
         return followUpTaskRepository.findAllWithJobApplication();
+    }
+
+    public List<FollowUpTask> searchFollowUpTasks(
+            TaskStatus status,
+            Long jobApplicationId,
+            boolean overdue
+    ) {
+        return followUpTaskRepository.findByFilters(
+                status,
+                jobApplicationId,
+                overdue,
+                LocalDate.now(),
+                TaskStatus.COMPLETED
+        );
     }
 
     public FollowUpTask getFollowUpTaskById(Long id) {
