@@ -49,5 +49,12 @@ public interface InterviewRepository extends JpaRepository<Interview, Long> {
             @Param("now") LocalDateTime now
     );
 
+    @Query("""
+        select count(interview)
+        from Interview interview
+        where interview.scheduledAt >= :now
+        """)
+    long countUpcomingInterviews(@Param("now") LocalDateTime now);
+
     void deleteByJobApplicationId(Long jobApplicationId);
 }

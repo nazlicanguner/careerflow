@@ -48,5 +48,23 @@ public interface FollowUpTaskRepository extends JpaRepository<FollowUpTask, Long
             @Param("completedStatus") TaskStatus completedStatus
     );
 
+    @Query("""
+        select count(task)
+        from FollowUpTask task
+        where task.status = :status
+        """)
+    long countTasksByStatus(@Param("status") TaskStatus status);
+
+    @Query("""
+        select count(task)
+        from FollowUpTask task
+        where task.dueDate < :today
+          and task.status <> :completedStatus
+        """)
+    long countOverdueTasks(
+            @Param("today") LocalDate today,
+            @Param("completedStatus") TaskStatus completedStatus
+    );
+
     void deleteByJobApplicationId(Long jobApplicationId);
 }
