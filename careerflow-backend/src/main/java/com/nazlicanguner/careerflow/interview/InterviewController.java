@@ -28,8 +28,14 @@ public class InterviewController {
     }
 
     @GetMapping
-    public List<Interview> getAllInterviews() {
-        return interviewService.getAllInterviews();
+    public List<Interview> getAllInterviews(
+            @RequestParam(required = false) Long jobApplicationId,
+            @RequestParam(defaultValue = "false") boolean upcoming
+    ) {
+        return interviewService.searchInterviews(
+                jobApplicationId,
+                upcoming
+        );
     }
 
     @GetMapping("/{id}")

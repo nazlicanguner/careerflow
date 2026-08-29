@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.nazlicanguner.careerflow.activitylog.ActivityAction;
 import com.nazlicanguner.careerflow.activitylog.ActivityEntityType;
 import com.nazlicanguner.careerflow.activitylog.ActivityLogService;
+import java.time.LocalDateTime;
 
 import java.util.List;
 
@@ -29,6 +30,17 @@ public class InterviewService {
 
     public List<Interview> getAllInterviews() {
         return interviewRepository.findAllWithJobApplication();
+    }
+
+    public List<Interview> searchInterviews(
+            Long jobApplicationId,
+            boolean upcoming
+    ) {
+        return interviewRepository.findByFilters(
+                jobApplicationId,
+                upcoming,
+                LocalDateTime.now()
+        );
     }
 
     public Interview getInterviewById(Long id) {
