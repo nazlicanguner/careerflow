@@ -4,6 +4,9 @@ import com.nazlicanguner.careerflow.jobapplication.JobApplication;
 import com.nazlicanguner.careerflow.jobapplication.JobApplicationNotFoundException;
 import com.nazlicanguner.careerflow.jobapplication.JobApplicationRepository;
 import org.springframework.stereotype.Service;
+import com.nazlicanguner.careerflow.activitylog.ActivityAction;
+import com.nazlicanguner.careerflow.activitylog.ActivityEntityType;
+import com.nazlicanguner.careerflow.activitylog.ActivityLogService;
 
 import java.util.List;
 
@@ -12,13 +15,16 @@ public class InterviewService {
 
     private final InterviewRepository interviewRepository;
     private final JobApplicationRepository jobApplicationRepository;
+    private final ActivityLogService activityLogService;
 
     public InterviewService(
             InterviewRepository interviewRepository,
-            JobApplicationRepository jobApplicationRepository
+            JobApplicationRepository jobApplicationRepository,
+            ActivityLogService activityLogService
     ) {
         this.interviewRepository = interviewRepository;
         this.jobApplicationRepository = jobApplicationRepository;
+        this.activityLogService = activityLogService;
     }
 
     public List<Interview> getAllInterviews() {
@@ -57,6 +63,13 @@ public class InterviewService {
 
         Interview savedInterview = interviewRepository.save(interview);
 
+        activityLogService.log(
+                ActivityEntityType.INTERVIEW,
+                savedInterview.getId(),
+                ActivityAction.CREATED,
+                "Interview created: " + savedInterview.getStageName()
+        );
+
         return getInterviewById(savedInterview.getId());
     }
 
@@ -84,12 +97,26 @@ public class InterviewService {
         existingInterview.setOutcome(updatedInterview.getOutcome());
         existingInterview.setNotes(updatedInterview.getNotes());
 
-        interviewRepository.save(existingInterview);
+        Interview savedInterview = interviewRepository.save(existingInterview);
+
+        activityLogService.log(
+                ActivityEntityType.INTERVIEW,
+                savedInterview.getId(),
+                ActivityAction.UPDATED,
+                "Interview updated: " + savedInterview.getStageName()
+        );
+
         return getInterviewById(id);
     }
 
     public void deleteInterview(Long id) {
         Interview interview = getInterviewById(id);
         interviewRepository.delete(interview);
+        activityLogService.log(
+                ActivityEntityType.INTERVIEW,
+                interview.getId(),
+                ActivityAction.DELETED,
+                "Interview deleted: " + interview.getStageName()
+        );
     }
 }

@@ -7,6 +7,9 @@ import com.nazlicanguner.careerflow.followuptask.FollowUpTaskRepository;
 import com.nazlicanguner.careerflow.interview.InterviewRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import com.nazlicanguner.careerflow.activitylog.ActivityAction;
+import com.nazlicanguner.careerflow.activitylog.ActivityEntityType;
+import com.nazlicanguner.careerflow.activitylog.ActivityLogService;
 
 import java.util.List;
 
@@ -17,14 +20,17 @@ public class JobApplicationService {
     private final CompanyRepository companyRepository;
     private final InterviewRepository interviewRepository;
     private final FollowUpTaskRepository followUpTaskRepository;
+    private final ActivityLogService activityLogService;
 
     public JobApplicationService(
             JobApplicationRepository jobApplicationRepository,
+            ActivityLogService activityLogService,
             CompanyRepository companyRepository,
             InterviewRepository interviewRepository,
             FollowUpTaskRepository followUpTaskRepository
     ) {
         this.jobApplicationRepository = jobApplicationRepository;
+        this.activityLogService = activityLogService;
         this.companyRepository = companyRepository;
         this.interviewRepository = interviewRepository;
         this.followUpTaskRepository = followUpTaskRepository;
@@ -39,6 +45,7 @@ public class JobApplicationService {
                 .orElseThrow(() -> new JobApplicationNotFoundException(id));
     }
 
+    @Transactional
     public JobApplication createJobApplication(
             Long companyId,
             JobApplication jobApplication
@@ -48,9 +55,19 @@ public class JobApplicationService {
 
         jobApplication.setCompany(company);
 
-        return jobApplicationRepository.save(jobApplication);
+        JobApplication savedJobApplication = jobApplicationRepository.save(jobApplication);
+
+        activityLogService.log(
+                ActivityEntityType.JOB_APPLICATION,
+                savedJobApplication.getId(),
+                ActivityAction.CREATED,
+                "Job application created: " + savedJobApplication.getPositionTitle()
+        );
+
+        return savedJobApplication;
     }
 
+    @Transactional
     public JobApplication updateJobApplication(
             Long id,
             JobApplication updatedJobApplication
@@ -82,18 +99,32 @@ public class JobApplicationService {
                 updatedJobApplication.getNotes()
         );
 
-        jobApplicationRepository.save(existingJobApplication);
+        JobApplication savedJobApplication =
+                jobApplicationRepository.save(existingJobApplication);
+
+        activityLogService.log(
+                ActivityEntityType.JOB_APPLICATION,
+                savedJobApplication.getId(),
+                ActivityAction.UPDATED,
+                "Job application updated: " + savedJobApplication.getPositionTitle()
+        );
 
         return getJobApplicationById(id);
     }
 
-        @Transactional
-        public void deleteJobApplication(Long id) {
+    @Transactional
+    public void deleteJobApplication(Long id) {
             JobApplication jobApplication = getJobApplicationById(id);
 
             interviewRepository.deleteByJobApplicationId(id);
             followUpTaskRepository.deleteByJobApplicationId(id);
 
             jobApplicationRepository.delete(jobApplication);
+            activityLogService.log(
+                    ActivityEntityType.JOB_APPLICATION,
+                    jobApplication.getId(),
+                    ActivityAction.DELETED,
+                    "Job application deleted: " + jobApplication.getPositionTitle()
+            );
         }
 }
