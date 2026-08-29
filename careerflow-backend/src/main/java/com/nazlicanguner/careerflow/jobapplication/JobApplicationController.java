@@ -30,8 +30,20 @@ public class JobApplicationController {
     }
 
     @GetMapping
-    public List<JobApplication> getAllJobApplications() {
-        return jobApplicationService.getAllJobApplications();
+    public List<JobApplication> getAllJobApplications(
+            @RequestParam(required = false) ApplicationStatus status,
+            @RequestParam(required = false) Long companyId,
+            @RequestParam(required = false) WorkMode workMode,
+            @RequestParam(defaultValue = "applicationDate") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction
+    ) {
+        return jobApplicationService.searchJobApplications(
+                status,
+                companyId,
+                workMode,
+                sortBy,
+                direction
+        );
     }
 
     @GetMapping("/{id}")

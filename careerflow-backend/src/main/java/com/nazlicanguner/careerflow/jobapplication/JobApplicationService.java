@@ -10,11 +10,21 @@ import org.springframework.stereotype.Service;
 import com.nazlicanguner.careerflow.activitylog.ActivityAction;
 import com.nazlicanguner.careerflow.activitylog.ActivityEntityType;
 import com.nazlicanguner.careerflow.activitylog.ActivityLogService;
+import org.springframework.data.domain.Sort;
 
+import java.util.Set;
 import java.util.List;
 
 @Service
 public class JobApplicationService {
+
+    private static final Set<String> ALLOWED_SORT_FIELDS = Set.of(
+            "applicationDate",
+            "createdAt",
+            "updatedAt",
+            "positionTitle",
+            "status"
+    );
 
     private final JobApplicationRepository jobApplicationRepository;
     private final CompanyRepository companyRepository;
@@ -38,6 +48,31 @@ public class JobApplicationService {
 
     public List<JobApplication> getAllJobApplications() {
         return jobApplicationRepository.findAllWithCompany();
+    }
+
+    public List<JobApplication> searchJobApplications(
+            ApplicationStatus status,
+            Long companyId,
+            WorkMode workMode,
+            String sortBy,
+            String direction
+    ) {
+        String safeSortBy = sortBy != null && ALLOWED_SORT_FIELDS.contains(sortBy)
+                ? sortBy
+                : "applicationDate";
+
+        Sort.Direction sortDirection = "asc".equalsIgnoreCase(direction)
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
+
+        Sort sort = Sort.by(sortDirection, safeSortBy);
+
+        return jobApplicationRepository.findByFilters(
+                status,
+                companyId,
+                workMode,
+                sort
+        );
     }
 
     public JobApplication getJobApplicationById(Long id) {
@@ -114,17 +149,18 @@ public class JobApplicationService {
 
     @Transactional
     public void deleteJobApplication(Long id) {
-            JobApplication jobApplication = getJobApplicationById(id);
+        JobApplication jobApplication = getJobApplicationById(id);
 
-            interviewRepository.deleteByJobApplicationId(id);
-            followUpTaskRepository.deleteByJobApplicationId(id);
+        interviewRepository.deleteByJobApplicationId(id);
+        followUpTaskRepository.deleteByJobApplicationId(id);
 
-            jobApplicationRepository.delete(jobApplication);
-            activityLogService.log(
-                    ActivityEntityType.JOB_APPLICATION,
-                    jobApplication.getId(),
-                    ActivityAction.DELETED,
-                    "Job application deleted: " + jobApplication.getPositionTitle()
-            );
-        }
+        jobApplicationRepository.delete(jobApplication);
+
+        activityLogService.log(
+                ActivityEntityType.JOB_APPLICATION,
+                jobApplication.getId(),
+                ActivityAction.DELETED,
+                "Job application deleted: " + jobApplication.getPositionTitle()
+        );
+    }
 }
