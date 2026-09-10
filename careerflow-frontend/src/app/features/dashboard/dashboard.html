@@ -1,0 +1,57 @@
+<section class="dashboard">
+  <header class="dashboard__header">
+    <div>
+      <p class="eyebrow">Overview</p>
+      <h1>CareerFlow Dashboard</h1>
+      <p class="subtitle">
+        Keep track of your job applications, interviews and follow-up tasks.
+      </p>
+    </div>
+  </header>
+
+  @if (isLoading()) {
+    <p class="state-message">Loading dashboard data...</p>
+  } @else if (errorMessage()) {
+    <p class="state-message state-message--error">
+      {{ errorMessage() }}
+    </p>
+  } @else if (summary(); as dashboard) {
+    <section class="metrics-grid">
+      <article class="metric-card metric-card--blue">
+        <p>Upcoming interviews</p>
+        <strong>{{ dashboard.upcomingInterviews }}</strong>
+        <span>Scheduled from today onwards</span>
+      </article>
+
+      <article class="metric-card metric-card--green">
+        <p>Open tasks</p>
+        <strong>{{ dashboard.openTasks }}</strong>
+        <span>Tasks still requiring attention</span>
+      </article>
+
+      <article class="metric-card metric-card--red">
+        <p>Overdue tasks</p>
+        <strong>{{ dashboard.overdueTasks }}</strong>
+        <span>Pending tasks past their due date</span>
+      </article>
+    </section>
+
+    <section class="status-panel">
+      <div class="status-panel__heading">
+        <div>
+          <p class="eyebrow">Applications</p>
+          <h2>Application status overview</h2>
+        </div>
+      </div>
+
+      <div class="status-list">
+        @for (item of dashboard.applicationsByStatus; track item.status) {
+          <article class="status-item">
+            <span class="status-item__label">{{ item.status }}</span>
+            <strong>{{ item.count }}</strong>
+          </article>
+        }
+      </div>
+    </section>
+  }
+</section>

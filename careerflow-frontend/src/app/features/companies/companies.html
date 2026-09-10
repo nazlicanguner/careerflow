@@ -1,0 +1,155 @@
+<section class="companies-page">
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">Companies</p>
+      <h2>Company directory</h2>
+      <p>Manage the companies connected to your job applications.</p>
+    </div>
+
+    <span class="result-count">{{ companies().length }} company(s)</span>
+  </div>
+
+  <div class="companies-layout">
+    <section class="panel company-form">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">
+            {{ editingCompany() ? 'Edit company' : 'New company' }}
+          </p>
+          <h3>
+            {{ editingCompany() ? editingCompany()?.name : 'Add a company' }}
+          </h3>
+        </div>
+
+        @if (editingCompany()) {
+          <button class="text-button" type="button" (click)="resetForm()">
+            Cancel edit
+          </button>
+        }
+      </div>
+
+      <form (ngSubmit)="saveCompany()">
+        <label>
+          Company name <span>*</span>
+          <input
+            type="text"
+            name="name"
+            [(ngModel)]="form.name"
+            placeholder="e.g. Spotify"
+          />
+        </label>
+
+        <label>
+          Industry
+          <input
+            type="text"
+            name="industry"
+            [(ngModel)]="form.industry"
+            placeholder="e.g. Technology"
+          />
+        </label>
+
+        <label>
+          Location
+          <input
+            type="text"
+            name="location"
+            [(ngModel)]="form.location"
+            placeholder="e.g. Berlin"
+          />
+        </label>
+
+        <label>
+          Website
+          <input
+            type="url"
+            name="website"
+            [(ngModel)]="form.website"
+            placeholder="https://example.com"
+          />
+        </label>
+
+        <label>
+          Notes
+          <textarea
+            name="notes"
+            [(ngModel)]="form.notes"
+            rows="4"
+            placeholder="Optional notes about the company"
+          ></textarea>
+        </label>
+
+        @if (formError()) {
+          <p class="form-error">{{ formError() }}</p>
+        }
+
+        <div class="form-actions">
+          <button class="primary-button" type="submit">
+            {{ editingCompany() ? 'Save changes' : 'Add company' }}
+          </button>
+          <button class="secondary-button" type="button" (click)="resetForm()">
+            Clear
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel companies-list">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Saved companies</p>
+          <h3>Your companies</h3>
+        </div>
+      </div>
+
+      @if (isLoading()) {
+        <p class="state-message">Loading companies...</p>
+      } @else if (errorMessage()) {
+        <p class="state-message state-message--error">{{ errorMessage() }}</p>
+      } @else if (companies().length === 0) {
+        <div class="empty-state">
+          <h3>No companies yet</h3>
+          <p>Add your first company using the form on the left.</p>
+        </div>
+      } @else {
+        <div class="company-list">
+          @for (company of companies(); track company.id) {
+            <article class="company-card">
+              <div class="company-card__main">
+                <h4>{{ company.name }}</h4>
+
+                <p>
+                  {{ company.industry || 'Industry not specified' }}
+                  @if (company.location) {
+                    <span> · {{ company.location }}</span>
+                  }
+                </p>
+
+                @if (company.website) {
+                  <a [href]="company.website" target="_blank" rel="noreferrer">
+                    {{ company.website }}
+                  </a>
+                }
+
+                @if (company.notes) {
+                  <p class="company-card__notes">{{ company.notes }}</p>
+                }
+              </div>
+
+              <div class="company-card__actions">
+                <button type="button" (click)="editCompany(company)">Edit</button>
+                <button
+                  class="delete-button"
+                  type="button"
+                  (click)="deleteCompany(company)"
+                >
+                  Delete
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </section>
+  </div>
+</section>

@@ -1,0 +1,128 @@
+<section class="applications-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Applications</p>
+      <h1>Job applications</h1>
+      <p class="subtitle">
+        Review and filter every role you are currently tracking.
+      </p>
+    </div>
+
+    <span class="result-count">
+      {{ applications().length }} result(s)
+    </span>
+  </header>
+
+  <section class="filters-panel">
+    <div class="filter-field">
+      <label for="status">Status</label>
+      <select id="status" [(ngModel)]="statusFilter">
+        <option value="">All statuses</option>
+
+        @for (status of statuses; track status) {
+          <option [value]="status">{{ status }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-field">
+      <label for="workMode">Work mode</label>
+      <select id="workMode" [(ngModel)]="workModeFilter">
+        <option value="">All work modes</option>
+
+        @for (workMode of workModes; track workMode) {
+          <option [value]="workMode">{{ workMode }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-field">
+      <label for="sortBy">Sort by</label>
+      <select id="sortBy" [(ngModel)]="sortBy">
+        <option value="applicationDate">Application date</option>
+        <option value="createdAt">Created date</option>
+        <option value="updatedAt">Last updated</option>
+        <option value="positionTitle">Position title</option>
+        <option value="status">Status</option>
+      </select>
+    </div>
+
+    <div class="filter-field">
+      <label for="direction">Direction</label>
+      <select id="direction" [(ngModel)]="direction">
+        <option value="desc">Newest first</option>
+        <option value="asc">Oldest first</option>
+      </select>
+    </div>
+
+    <div class="filter-actions">
+      <button class="button button--primary" (click)="loadApplications()">
+        Apply filters
+      </button>
+
+      <button class="button button--secondary" (click)="clearFilters()">
+        Reset
+      </button>
+    </div>
+  </section>
+
+  @if (isLoading()) {
+    <p class="state-message">Loading job applications...</p>
+  } @else if (errorMessage()) {
+    <p class="state-message state-message--error">
+      {{ errorMessage() }}
+    </p>
+  } @else if (applications().length === 0) {
+    <section class="empty-state">
+      <h2>No applications found</h2>
+      <p>Try changing or resetting your filters.</p>
+    </section>
+  } @else {
+    <section class="table-card">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Role</th>
+              <th>Company</th>
+              <th>Status</th>
+              <th>Work mode</th>
+              <th>Location</th>
+              <th>Applied</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (application of applications(); track application.id) {
+              <tr>
+                <td>
+                  <strong>{{ application.positionTitle }}</strong>
+                  <span class="secondary-text">
+                    {{ application.source || 'No source specified' }}
+                  </span>
+                </td>
+
+                <td>{{ application.company.name }}</td>
+
+                <td>
+                  <span
+                    class="status-badge"
+                    [class]="
+                      'status-badge ' + getStatusClass(application.status)
+                    "
+                  >
+                    {{ application.status }}
+                  </span>
+                </td>
+
+                <td>{{ application.workMode || '—' }}</td>
+                <td>{{ application.location || '—' }}</td>
+                <td>{{ application.applicationDate | date: 'dd MMM yyyy' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  }
+</section>

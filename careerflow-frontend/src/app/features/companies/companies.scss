@@ -1,0 +1,269 @@
+.companies-page {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.page-heading,
+.panel-heading,
+.company-card,
+.company-card__actions,
+.form-actions {
+  display: flex;
+  align-items: center;
+}
+
+.page-heading,
+.panel-heading {
+  justify-content: space-between;
+}
+
+.page-heading {
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #57719d;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h2,
+h3,
+h4,
+p {
+  margin-top: 0;
+}
+
+h2 {
+  margin-bottom: 8px;
+  color: #10264b;
+  font-size: clamp(32px, 4vw, 42px);
+  letter-spacing: -0.04em;
+}
+
+h3 {
+  margin-bottom: 0;
+  color: #14284b;
+}
+
+.page-heading > div > p:last-child {
+  margin-bottom: 0;
+  color: #60769d;
+}
+
+.result-count {
+  padding: 9px 13px;
+  border-radius: 99px;
+  background: #edf3ff;
+  color: #2961d6;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.companies-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.8fr) minmax(420px, 1.2fr);
+  gap: 22px;
+}
+
+.panel {
+  padding: 28px;
+  border: 1px solid #dde5f2;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 12px 28px rgb(25 50 90 / 6%);
+}
+
+.company-form form {
+  display: grid;
+  gap: 17px;
+  margin-top: 25px;
+}
+
+label {
+  display: grid;
+  gap: 7px;
+  color: #455f8a;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+label span {
+  color: #e2484c;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #d4deed;
+  border-radius: 9px;
+  outline: none;
+  color: #182d51;
+  background: #fff;
+  font-weight: 500;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #3975f7;
+  box-shadow: 0 0 0 3px rgb(57 117 247 / 12%);
+}
+
+textarea {
+  resize: vertical;
+}
+
+.form-actions {
+  gap: 10px;
+  margin-top: 4px;
+}
+
+button {
+  cursor: pointer;
+}
+
+.primary-button,
+.secondary-button,
+.text-button,
+.company-card__actions button {
+  border-radius: 9px;
+  font-weight: 800;
+}
+
+.primary-button {
+  padding: 11px 15px;
+  border: 1px solid #3975f7;
+  background: #3975f7;
+  color: #fff;
+}
+
+.secondary-button,
+.company-card__actions button,
+.text-button {
+  border: 1px solid #d4deed;
+  background: #fff;
+  color: #38557f;
+}
+
+.secondary-button {
+  padding: 11px 15px;
+}
+
+.text-button {
+  padding: 8px 10px;
+}
+
+.company-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.company-card {
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid #e0e7f1;
+  border-radius: 12px;
+  background: #fbfcff;
+}
+
+.company-card h4 {
+  margin-bottom: 7px;
+  color: #152b51;
+  font-size: 16px;
+}
+
+.company-card p {
+  margin-bottom: 7px;
+  color: #60769d;
+  font-size: 14px;
+}
+
+.company-card a {
+  color: #2f6de5;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.company-card__notes {
+  margin-top: 10px;
+  font-size: 13px !important;
+}
+
+.company-card__actions {
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.company-card__actions button {
+  padding: 8px 10px;
+}
+
+.company-card__actions .delete-button {
+  border-color: #ffd4d6;
+  color: #ce4147;
+}
+
+.form-error,
+.state-message {
+  margin: 0;
+  padding: 13px;
+  border-radius: 10px;
+  background: #f3f6fb;
+  color: #526b93;
+  font-size: 14px;
+}
+
+.form-error,
+.state-message--error {
+  background: #fff0f0;
+  color: #c53c43;
+}
+
+.empty-state {
+  margin-top: 22px;
+  padding: 28px;
+  border-radius: 12px;
+  background: #f5f7fb;
+  color: #60769d;
+}
+
+.empty-state h3 {
+  margin-bottom: 7px;
+}
+
+.empty-state p {
+  margin-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .companies-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .page-heading,
+  .company-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .company-card__actions {
+    width: 100%;
+  }
+
+  .company-card__actions button {
+    flex: 1;
+  }
+
+  .panel {
+    padding: 20px;
+  }
+}
