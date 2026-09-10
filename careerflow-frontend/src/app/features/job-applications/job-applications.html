@@ -1,127 +1,243 @@
 <section class="applications-page">
-  <header class="page-header">
+  <div class="page-heading">
     <div>
       <p class="eyebrow">Applications</p>
-      <h1>Job applications</h1>
-      <p class="subtitle">
-        Review and filter every role you are currently tracking.
-      </p>
+      <h2>Job applications</h2>
+      <p>Review, filter and manage every role you are currently tracking.</p>
     </div>
 
-    <span class="result-count">
-      {{ applications().length }} result(s)
-    </span>
-  </header>
-
-  <section class="filters-panel">
-    <div class="filter-field">
-      <label for="status">Status</label>
-      <select id="status" [(ngModel)]="statusFilter">
-        <option value="">All statuses</option>
-
-        @for (status of statuses; track status) {
-          <option [value]="status">{{ status }}</option>
-        }
-      </select>
-    </div>
-
-    <div class="filter-field">
-      <label for="workMode">Work mode</label>
-      <select id="workMode" [(ngModel)]="workModeFilter">
-        <option value="">All work modes</option>
-
-        @for (workMode of workModes; track workMode) {
-          <option [value]="workMode">{{ workMode }}</option>
-        }
-      </select>
-    </div>
-
-    <div class="filter-field">
-      <label for="sortBy">Sort by</label>
-      <select id="sortBy" [(ngModel)]="sortBy">
-        <option value="applicationDate">Application date</option>
-        <option value="createdAt">Created date</option>
-        <option value="updatedAt">Last updated</option>
-        <option value="positionTitle">Position title</option>
-        <option value="status">Status</option>
-      </select>
-    </div>
-
-    <div class="filter-field">
-      <label for="direction">Direction</label>
-      <select id="direction" [(ngModel)]="direction">
-        <option value="desc">Newest first</option>
-        <option value="asc">Oldest first</option>
-      </select>
-    </div>
-
-    <div class="filter-actions">
-      <button class="button button--primary" (click)="loadApplications()">
-        Apply filters
+    <div class="heading-actions">
+      <span class="result-count">{{ applications().length }} result(s)</span>
+      <button class="primary-button" type="button" (click)="openForm()">
+        Add application
       </button>
+    </div>
+  </div>
 
-      <button class="button button--secondary" (click)="clearFilters()">
-        Reset
-      </button>
+  @if (isFormOpen()) {
+    <section class="panel application-form-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">New application</p>
+          <h3>Add a job application</h3>
+        </div>
+
+        <button class="text-button" type="button" (click)="closeForm()">
+          Cancel
+        </button>
+      </div>
+
+      @if (companies().length === 0) {
+        <p class="form-error">
+          No companies are available. Add a company before creating an application.
+        </p>
+      } @else {
+        <form class="application-form" (ngSubmit)="saveApplication()">
+          <label>
+            Company <span>*</span>
+            <select name="companyId" [(ngModel)]="form.companyId">
+              <option [ngValue]="null">Select a company</option>
+              @for (company of companies(); track company.id) {
+                <option [ngValue]="company.id">{{ company.name }}</option>
+              }
+            </select>
+          </label>
+
+          <label>
+            Position title <span>*</span>
+            <input
+              type="text"
+              name="positionTitle"
+              [(ngModel)]="form.positionTitle"
+              placeholder="e.g. Software Engineer"
+            />
+          </label>
+
+          <label>
+            Status
+            <select name="status" [(ngModel)]="form.status">
+              @for (status of statuses; track status) {
+                <option [value]="status">{{ status }}</option>
+              }
+            </select>
+          </label>
+
+          <label>
+            Work mode
+            <select name="workMode" [(ngModel)]="form.workMode">
+              <option value="">Not specified</option>
+              @for (mode of workModes; track mode) {
+                <option [value]="mode">{{ mode }}</option>
+              }
+            </select>
+          </label>
+
+          <label>
+            Location
+            <input
+              type="text"
+              name="location"
+              [(ngModel)]="form.location"
+              placeholder="e.g. Berlin"
+            />
+          </label>
+
+          <label>
+            Application date
+            <input
+              type="date"
+              name="applicationDate"
+              [(ngModel)]="form.applicationDate"
+            />
+          </label>
+
+          <label>
+            Source
+            <input
+              type="text"
+              name="source"
+              [(ngModel)]="form.source"
+              placeholder="e.g. LinkedIn"
+            />
+          </label>
+
+          <label>
+            Job URL
+            <input
+              type="url"
+              name="jobUrl"
+              [(ngModel)]="form.jobUrl"
+              placeholder="https://..."
+            />
+          </label>
+
+          <label class="form-field--full">
+            Notes
+            <textarea
+              name="notes"
+              [(ngModel)]="form.notes"
+              rows="4"
+              placeholder="Optional notes about this application"
+            ></textarea>
+          </label>
+
+          @if (formError()) {
+            <p class="form-error form-field--full">{{ formError() }}</p>
+          }
+
+          <div class="form-actions form-field--full">
+            <button class="primary-button" type="submit">
+              Save application
+            </button>
+            <button class="secondary-button" type="button" (click)="closeForm()">
+              Cancel
+            </button>
+          </div>
+        </form>
+      }
+    </section>
+  }
+
+  <section class="panel filters-panel">
+    <div class="filters">
+      <label>
+        Status
+        <select name="statusFilter" [(ngModel)]="statusFilter">
+          <option value="">All statuses</option>
+          @for (status of statuses; track status) {
+            <option [value]="status">{{ status }}</option>
+          }
+        </select>
+      </label>
+
+      <label>
+        Work mode
+        <select name="workModeFilter" [(ngModel)]="workModeFilter">
+          <option value="">All work modes</option>
+          @for (mode of workModes; track mode) {
+            <option [value]="mode">{{ mode }}</option>
+          }
+        </select>
+      </label>
+
+      <label>
+        Sort by
+        <select name="sortBy" [(ngModel)]="sortBy">
+          <option value="applicationDate">Application date</option>
+          <option value="positionTitle">Position title</option>
+          <option value="status">Status</option>
+        </select>
+      </label>
+
+      <label>
+        Direction
+        <select name="direction" [(ngModel)]="direction">
+          <option value="desc">Newest first</option>
+          <option value="asc">Oldest first</option>
+        </select>
+      </label>
+
+      <div class="filter-actions">
+        <button class="primary-button" type="button" (click)="loadApplications()">
+          Apply filters
+        </button>
+        <button class="secondary-button" type="button" (click)="clearFilters()">
+          Reset
+        </button>
+      </div>
     </div>
   </section>
 
   @if (isLoading()) {
-    <p class="state-message">Loading job applications...</p>
+    <section class="panel state-panel">Loading job applications...</section>
   } @else if (errorMessage()) {
-    <p class="state-message state-message--error">
+    <section class="panel state-panel state-panel--error">
       {{ errorMessage() }}
-    </p>
+    </section>
   } @else if (applications().length === 0) {
-    <section class="empty-state">
-      <h2>No applications found</h2>
+    <section class="panel empty-state">
+      <h3>No applications found</h3>
       <p>Try changing or resetting your filters.</p>
     </section>
   } @else {
-    <section class="table-card">
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Role</th>
-              <th>Company</th>
-              <th>Status</th>
-              <th>Work mode</th>
-              <th>Location</th>
-              <th>Applied</th>
-            </tr>
-          </thead>
+    <section class="panel applications-table-panel">
+      <div class="applications-table">
+        <div class="table-header">
+          <span>Role</span>
+          <span>Company</span>
+          <span>Status</span>
+          <span>Work mode</span>
+          <span>Location</span>
+          <span>Applied</span>
+        </div>
 
-          <tbody>
-            @for (application of applications(); track application.id) {
-              <tr>
-                <td>
-                  <strong>{{ application.positionTitle }}</strong>
-                  <span class="secondary-text">
-                    {{ application.source || 'No source specified' }}
-                  </span>
-                </td>
+        @for (application of applications(); track application.id) {
+          <article class="table-row">
+            <div>
+              <strong>{{ application.positionTitle }}</strong>
+              <small>{{ application.source || 'Source not specified' }}</small>
+            </div>
 
-                <td>{{ application.company.name }}</td>
+            <span>{{ application.company.name }}</span>
 
-                <td>
-                  <span
-                    class="status-badge"
-                    [class]="
-                      'status-badge ' + getStatusClass(application.status)
-                    "
-                  >
-                    {{ application.status }}
-                  </span>
-                </td>
+            <span
+              class="status-badge"
+              [class]="getStatusClass(application.status)"
+            >
+              {{ application.status }}
+            </span>
 
-                <td>{{ application.workMode || '—' }}</td>
-                <td>{{ application.location || '—' }}</td>
-                <td>{{ application.applicationDate | date: 'dd MMM yyyy' }}</td>
-              </tr>
-            }
-          </tbody>
-        </table>
+            <span>{{ application.workMode || '—' }}</span>
+            <span>{{ application.location || '—' }}</span>
+            <span>
+              {{
+                application.applicationDate
+                  ? (application.applicationDate | date: 'dd MMM y')
+                  : '—'
+              }}
+            </span>
+          </article>
+        }
       </div>
     </section>
   }
