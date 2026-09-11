@@ -24,7 +24,7 @@
     </section>
   } @else {
     <section class="tasks-list">
-      @for (task of tasks(); track task.id) {
+      @for (task of paginatedTasks(); track task.id) {
         <article
           class="task-card"
           [class.task-card--overdue]="isOverdue(task)"
@@ -65,5 +65,38 @@
         </article>
       }
     </section>
+
+    <div class="pagination">
+      <button
+        class="pagination-button"
+        type="button"
+        [disabled]="currentPage() === 1"
+        (click)="previousPage()"
+      >
+        Previous
+      </button>
+
+      <div class="page-numbers">
+        @for (page of pageNumbers(); track page) {
+          <button
+            class="page-number"
+            type="button"
+            [class.page-number--active]="currentPage() === page"
+            (click)="goToPage(page)"
+          >
+            {{ page }}
+          </button>
+        }
+      </div>
+
+      <button
+        class="pagination-button"
+        type="button"
+        [disabled]="currentPage() === totalPages()"
+        (click)="nextPage()"
+      >
+        Next
+      </button>
+    </div>
   }
 </section>
