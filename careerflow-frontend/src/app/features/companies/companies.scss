@@ -267,3 +267,53 @@ button {
     padding: 20px;
   }
 }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid #e5ebf4;
+}
+
+.page-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.pagination-button,
+.page-number {
+  min-width: 38px;
+  padding: 8px 11px;
+  border: 1px solid #d4deed;
+  border-radius: 8px;
+  background: #fff;
+  color: #38557f;
+  font-weight: 800;
+}
+
+.pagination-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.page-number--active {
+  border-color: #3975f7;
+  background: #3975f7;
+  color: #fff;
+}
+
+@media (max-width: 600px) {
+  .pagination {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .pagination-button {
+    width: 100%;
+  }
+}

@@ -113,7 +113,7 @@
         </div>
       } @else {
         <div class="company-list">
-          @for (company of companies(); track company.id) {
+          @for (company of paginatedCompanies(); track company.id) {
             <article class="company-card">
               <div class="company-card__main">
                 <h4>{{ company.name }}</h4>
@@ -148,6 +148,39 @@
               </div>
             </article>
           }
+        </div>
+
+        <div class="pagination">
+          <button
+            class="pagination-button"
+            type="button"
+            [disabled]="currentPage() === 1"
+            (click)="previousPage()"
+          >
+            Previous
+          </button>
+
+          <div class="page-numbers">
+            @for (page of pageNumbers(); track page) {
+              <button
+                class="page-number"
+                type="button"
+                [class.page-number--active]="currentPage() === page"
+                (click)="goToPage(page)"
+              >
+                {{ page }}
+              </button>
+            }
+          </div>
+
+          <button
+            class="pagination-button"
+            type="button"
+            [disabled]="currentPage() === totalPages()"
+            (click)="nextPage()"
+          >
+            Next
+          </button>
         </div>
       }
     </section>

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Company, CompanyPayload } from '../../core/models/company.model';
@@ -17,6 +17,23 @@ export class Companies implements OnInit {
   readonly formError = signal('');
   readonly editingCompany = signal<Company | null>(null);
 
+  readonly pageSize = 10;
+  readonly currentPage = signal(1);
+
+  readonly totalPages = computed(() =>
+    Math.ceil(this.companies().length / this.pageSize),
+  );
+
+  readonly paginatedCompanies = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.pageSize;
+
+    return this.companies().slice(startIndex, startIndex + this.pageSize);
+  });
+
+  readonly pageNumbers = computed(() =>
+    Array.from({ length: this.totalPages() }, (_, index) => index + 1),
+  );
+
   form: CompanyPayload = this.emptyForm();
 
   constructor(private readonly companiesApi: CompaniesApi) {}
@@ -32,6 +49,7 @@ export class Companies implements OnInit {
     this.companiesApi.getAll().subscribe({
       next: (companies) => {
         this.companies.set(companies);
+        this.currentPage.set(1);
         this.isLoading.set(false);
       },
       error: () => {
@@ -50,6 +68,7 @@ export class Companies implements OnInit {
     }
 
     this.formError.set('');
+
     const payload: CompanyPayload = {
       name: this.form.name.trim(),
       industry: this.nullIfEmpty(this.form.industry),
@@ -118,6 +137,24 @@ export class Companies implements OnInit {
     this.editingCompany.set(null);
     this.form = this.emptyForm();
     this.formError.set('');
+  }
+
+  previousPage(): void {
+    if (this.currentPage() > 1) {
+      this.currentPage.update((page) => page - 1);
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage() < this.totalPages()) {
+      this.currentPage.update((page) => page + 1);
+    }
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage.set(page);
+    }
   }
 
   private emptyForm(): CompanyPayload {
