@@ -24,7 +24,7 @@
     </section>
   } @else {
     <section class="interview-list">
-      @for (interview of interviews(); track interview.id) {
+      @for (interview of paginatedInterviews(); track interview.id) {
         <article class="interview-card">
           <div class="interview-card__date">
             <strong>{{ interview.scheduledAt | date: 'dd' }}</strong>
@@ -60,5 +60,38 @@
         </article>
       }
     </section>
+
+    <div class="pagination">
+      <button
+        class="pagination-button"
+        type="button"
+        [disabled]="currentPage() === 1"
+        (click)="previousPage()"
+      >
+        Previous
+      </button>
+
+      <div class="page-numbers">
+        @for (page of pageNumbers(); track page) {
+          <button
+            class="page-number"
+            type="button"
+            [class.page-number--active]="currentPage() === page"
+            (click)="goToPage(page)"
+          >
+            {{ page }}
+          </button>
+        }
+      </div>
+
+      <button
+        class="pagination-button"
+        type="button"
+        [disabled]="currentPage() === totalPages()"
+        (click)="nextPage()"
+      >
+        Next
+      </button>
+    </div>
   }
 </section>
