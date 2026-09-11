@@ -1,1 +1,69 @@
-<p>follow-up-tasks works!</p>
+<section class="tasks-page">
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">Follow-up tasks</p>
+      <h2>Stay on top of next steps</h2>
+      <p>Track the actions that keep your job search moving forward.</p>
+    </div>
+
+    <button class="secondary-button" type="button" (click)="loadTasks()">
+      Refresh
+    </button>
+  </div>
+
+  @if (isLoading()) {
+    <section class="panel state-message">Loading follow-up tasks...</section>
+  } @else if (errorMessage()) {
+    <section class="panel state-message state-message--error">
+      {{ errorMessage() }}
+    </section>
+  } @else if (tasks().length === 0) {
+    <section class="panel empty-state">
+      <h3>No follow-up tasks</h3>
+      <p>Create tasks from the backend API as you progress through applications.</p>
+    </section>
+  } @else {
+    <section class="tasks-list">
+      @for (task of tasks(); track task.id) {
+        <article
+          class="task-card"
+          [class.task-card--overdue]="isOverdue(task)"
+        >
+          <div class="task-card__check">
+            @if (task.status === 'COMPLETED') {
+              ✓
+            } @else {
+              ○
+            }
+          </div>
+
+          <div class="task-card__content">
+            <div class="task-card__topline">
+              <span class="task-status" [class]="getStatusClass(task.status)">
+                {{ task.status }}
+              </span>
+
+              @if (isOverdue(task)) {
+                <span class="overdue-badge">Overdue</span>
+              }
+            </div>
+
+            <h3>{{ task.title }}</h3>
+            <p class="role">
+              {{ task.jobApplication.positionTitle }}
+              · {{ task.jobApplication.company.name }}
+            </p>
+
+            <p class="due-date">
+              Due {{ task.dueDate | date: 'dd MMM y' }}
+            </p>
+
+            @if (task.notes) {
+              <p class="notes">{{ task.notes }}</p>
+            }
+          </div>
+        </article>
+      }
+    </section>
+  }
+</section>

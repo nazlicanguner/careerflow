@@ -1,1 +1,64 @@
-<p>interviews works!</p>
+<section class="interviews-page">
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">Interviews</p>
+      <h2>Interview schedule</h2>
+      <p>Track every stage of your active application processes.</p>
+    </div>
+
+    <button class="secondary-button" type="button" (click)="loadInterviews()">
+      Refresh
+    </button>
+  </div>
+
+  @if (isLoading()) {
+    <section class="panel state-message">Loading interviews...</section>
+  } @else if (errorMessage()) {
+    <section class="panel state-message state-message--error">
+      {{ errorMessage() }}
+    </section>
+  } @else if (interviews().length === 0) {
+    <section class="panel empty-state">
+      <h3>No interviews scheduled</h3>
+      <p>Create an interview from the backend API when an application progresses.</p>
+    </section>
+  } @else {
+    <section class="interview-list">
+      @for (interview of interviews(); track interview.id) {
+        <article class="interview-card">
+          <div class="interview-card__date">
+            <strong>{{ interview.scheduledAt | date: 'dd' }}</strong>
+            <span>{{ interview.scheduledAt | date: 'MMM' }}</span>
+          </div>
+
+          <div class="interview-card__content">
+            <div class="interview-card__topline">
+              <span class="stage-badge">Stage {{ interview.stageNumber }}</span>
+              <span
+                class="outcome-badge"
+                [class]="getOutcomeClass(interview.outcome)"
+              >
+                {{ interview.outcome }}
+              </span>
+            </div>
+
+            <h3>{{ interview.stageName }}</h3>
+            <p class="role">
+              {{ interview.jobApplication.positionTitle }}
+              · {{ interview.jobApplication.company.name }}
+            </p>
+
+            <div class="interview-card__details">
+              <span>{{ interview.interviewType }}</span>
+              <span>{{ interview.scheduledAt | date: 'dd MMM y, HH:mm' }}</span>
+            </div>
+
+            @if (interview.notes) {
+              <p class="notes">{{ interview.notes }}</p>
+            }
+          </div>
+        </article>
+      }
+    </section>
+  }
+</section>

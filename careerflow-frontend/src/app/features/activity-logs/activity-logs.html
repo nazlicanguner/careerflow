@@ -1,1 +1,52 @@
-<p>activity-logs works!</p>
+<section class="activity-page">
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">MongoDB activity log</p>
+      <h2>Recent activity</h2>
+      <p>Audit trail of changes made across your CareerFlow workspace.</p>
+    </div>
+
+    <button class="secondary-button" type="button" (click)="loadLogs()">
+      Refresh
+    </button>
+  </div>
+
+  @if (isLoading()) {
+    <section class="panel state-message">Loading activity logs...</section>
+  } @else if (errorMessage()) {
+    <section class="panel state-message state-message--error">
+      {{ errorMessage() }}
+    </section>
+  } @else if (logs().length === 0) {
+    <section class="panel empty-state">
+      <h3>No activity has been recorded yet</h3>
+      <p>Create, update or delete an item to generate an activity log.</p>
+    </section>
+  } @else {
+    <section class="activity-list">
+      @for (log of logs(); track log.id) {
+        <article class="activity-item" [class]="getActionClass(log.action)">
+          <div class="activity-item__marker">
+            @if (log.action === 'CREATED') {
+              +
+            } @else if (log.action === 'UPDATED') {
+              ↻
+            } @else {
+              −
+            }
+          </div>
+
+          <div class="activity-item__content">
+            <div class="activity-item__topline">
+              <span class="action-badge">{{ log.action }}</span>
+              <span class="entity-label">{{ formatEntityType(log.entityType) }}</span>
+            </div>
+
+            <p>{{ log.message }}</p>
+            <time>{{ log.occurredAt | date: 'dd MMM y, HH:mm' }}</time>
+          </div>
+        </article>
+      }
+    </section>
+  }
+</section>
