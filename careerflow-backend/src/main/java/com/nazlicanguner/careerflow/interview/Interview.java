@@ -19,6 +19,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import jakarta.persistence.Index;
 
 import java.time.LocalDateTime;
 
@@ -28,7 +29,11 @@ import java.time.LocalDateTime;
         uniqueConstraints = @UniqueConstraint(
                 name = "uk_interviews_job_application_stage",
                 columnNames = {"job_application_id", "stage_number"}
-        )
+        ),
+        indexes = {
+                @Index(name = "idx_interviews_job_application", columnList = "job_application_id"),
+                @Index(name = "idx_interviews_scheduled_at", columnList = "scheduled_at")
+        }
 )
 public class Interview {
 

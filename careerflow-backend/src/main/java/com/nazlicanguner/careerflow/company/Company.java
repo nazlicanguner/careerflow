@@ -11,9 +11,16 @@ import jakarta.persistence.PreUpdate;
 import java.time.LocalDateTime;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.persistence.Index;
 
 @Entity
-@Table(name = "companies")
+@Table(
+        name = "companies",
+        indexes = {
+                @Index(name = "idx_companies_name", columnList = "name"),
+                @Index(name = "idx_companies_location", columnList = "location")
+        }
+)
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,7 @@
 package com.nazlicanguner.careerflow.company;
 
 import com.nazlicanguner.careerflow.jobapplication.JobApplicationRepository;
+import com.nazlicanguner.careerflow.activitylog.ActivityLogService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +23,9 @@ class CompanyServiceTest {
 
     @Mock
     private JobApplicationRepository jobApplicationRepository;
+
+    @Mock
+    private ActivityLogService activityLogService;
 
     @InjectMocks
     private CompanyService companyService;

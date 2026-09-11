@@ -17,12 +17,21 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.persistence.Index;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "job_applications")
+@Table(
+        name = "job_applications",
+        indexes = {
+                @Index(name = "idx_job_applications_company", columnList = "company_id"),
+                @Index(name = "idx_job_applications_status", columnList = "status"),
+                @Index(name = "idx_job_applications_work_mode", columnList = "work_mode"),
+                @Index(name = "idx_job_applications_application_date", columnList = "application_date")
+        }
+)
 public class JobApplication {
 
     @Id
