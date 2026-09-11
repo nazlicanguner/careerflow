@@ -24,7 +24,7 @@
     </section>
   } @else {
     <section class="activity-list">
-      @for (log of logs(); track log.id) {
+      @for (log of paginatedLogs(); track log.id) {
         <article class="activity-item" [class]="getActionClass(log.action)">
           <div class="activity-item__marker">
             @if (log.action === 'CREATED') {
@@ -48,5 +48,38 @@
         </article>
       }
     </section>
+
+    <div class="pagination">
+      <button
+        class="pagination-button"
+        type="button"
+        [disabled]="currentPage() === 1"
+        (click)="previousPage()"
+      >
+        Previous
+      </button>
+
+      <div class="page-numbers">
+        @for (page of pageNumbers(); track page) {
+          <button
+            class="page-number"
+            type="button"
+            [class.page-number--active]="currentPage() === page"
+            (click)="goToPage(page)"
+          >
+            {{ page }}
+          </button>
+        }
+      </div>
+
+      <button
+        class="pagination-button"
+        type="button"
+        [disabled]="currentPage() === totalPages()"
+        (click)="nextPage()"
+      >
+        Next
+      </button>
+    </div>
   }
 </section>
