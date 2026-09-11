@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Company } from '../../core/models/company.model';
@@ -38,6 +38,23 @@ export class JobApplications implements OnInit {
   readonly errorMessage = signal('');
   readonly formError = signal('');
   readonly isFormOpen = signal(false);
+
+  readonly pageSize = 10;
+  readonly currentPage = signal(1);
+
+  readonly totalPages = computed(() =>
+    Math.ceil(this.applications().length / this.pageSize),
+  );
+
+  readonly paginatedApplications = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.pageSize;
+
+    return this.applications().slice(startIndex, startIndex + this.pageSize);
+  });
+
+  readonly pageNumbers = computed(() =>
+    Array.from({ length: this.totalPages() }, (_, index) => index + 1),
+  );
 
   readonly statuses: ApplicationStatus[] = [
     'SAVED',
@@ -88,6 +105,7 @@ export class JobApplications implements OnInit {
     this.jobApplicationsApi.getAll(filters).subscribe({
       next: (applications) => {
         this.applications.set(applications);
+        this.currentPage.set(1);
         this.isLoading.set(false);
       },
       error: () => {
@@ -159,6 +177,24 @@ export class JobApplications implements OnInit {
     this.sortBy = 'applicationDate';
     this.direction = 'desc';
     this.loadApplications();
+  }
+
+  previousPage(): void {
+    if (this.currentPage() > 1) {
+      this.currentPage.update((page) => page - 1);
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage() < this.totalPages()) {
+      this.currentPage.update((page) => page + 1);
+    }
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage.set(page);
+    }
   }
 
   getStatusClass(status: ApplicationStatus): string {

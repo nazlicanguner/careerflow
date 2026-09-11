@@ -211,7 +211,7 @@
           <span>Applied</span>
         </div>
 
-        @for (application of applications(); track application.id) {
+        @for (application of paginatedApplications(); track application.id) {
           <article class="table-row">
             <div>
               <strong>{{ application.positionTitle }}</strong>
@@ -238,6 +238,39 @@
             </span>
           </article>
         }
+      </div>
+
+      <div class="pagination">
+        <button
+          class="pagination-button"
+          type="button"
+          [disabled]="currentPage() === 1"
+          (click)="previousPage()"
+        >
+          Previous
+        </button>
+
+        <div class="page-numbers">
+          @for (page of pageNumbers(); track page) {
+            <button
+              class="page-number"
+              type="button"
+              [class.page-number--active]="currentPage() === page"
+              (click)="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+          }
+        </div>
+
+        <button
+          class="pagination-button"
+          type="button"
+          [disabled]="currentPage() === totalPages()"
+          (click)="nextPage()"
+        >
+          Next
+        </button>
       </div>
     </section>
   }
