@@ -22,4 +22,9 @@ public class ActivityLogController {
     public List<ActivityLog> getAllActivityLogs() {
         return activityLogService.getAllActivityLogs();
     }
+
+    @GetMapping("/summary")
+    public List<ActivityLogSummary> getActivityLogSummary() {
+        return activityLogService.getActivityLogSummary();
+    }
 }
